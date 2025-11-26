@@ -23,7 +23,7 @@ try {
         console.log('7. Send ETH');
         console.log('0. Exit\n');
 
-        index = await rl.question('Option: ');
+        index = await rl.question('💬 Option: ');
         await selectOperation(rl, index);
     }
 

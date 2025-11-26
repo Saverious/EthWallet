@@ -11,16 +11,16 @@ export async function deployContracts() {
         await ethSender.waitForDeployment();
 
         ethSenderAddr = await ethSender.getAddress();
-        console.log('Deployed EthSender');
+        console.log('✅ Deployed EthSender');
 
         const EthWalletCFactory = await ethers.getContractFactory('EthWallet');
         const ethWallet = await EthWalletCFactory.deploy();
         await ethWallet.waitForDeployment();
 
         ethWalletAddr = await ethWallet.getAddress();
-        console.log('Deployed EthWallet');
+        console.log('✅ Deployed EthWallet');
     }catch(e){
-        console.log("*** scripts/deploy.js ***\n", e);
+        console.log("*** scripts/deploy.js ‼️ ***\n", e);
     }
 }
 
@@ -34,73 +34,85 @@ function ethWalletExists(){
 
 export function viewAddresses() {
     if(ethSenderExist()){
-        console.log('EthSender.address: ', ethSenderAddr);
+        console.log('✅ EthSender.address: ', ethSenderAddr);
     }else{
-        console.log('EthSender address not found. Ensure EthSender contract is deployed');
+        console.log('⚠️  EthSender address not found. Ensure EthSender contract is deployed');
     }
 
     if(ethWalletExists()){
-        console.log('EthWallet.address: ', ethWalletAddr);
+        console.log('✅ EthWallet.address: ', ethWalletAddr);
     }else{
-        console.log('EthWallet address not found. Ensure EthWallet contract is deployed');
+        console.log('⚠️  EthWallet address not found. Ensure EthWallet contract is deployed');
     }
 }
 
 export async function viewOwners() {
     if(ethSenderExist()){
         const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
-        console.log('EthSender.owner: ', await ethSender.owner());
+        console.log('✅ EthSender.owner: ', await ethSender.owner());
     }else{
-        console.log('Cannot view owner. EthSender address not found');
+        console.log('⚠️  Cannot view owner. EthSender address not found');
     }
 
     if(ethWalletExists()){
         const ethWallet = await ethers.getContractAt('EthWallet', ethWalletAddr);
-        console.log('EthWallet.owner: ', await ethWallet.owner());
+        console.log('✅ EthWallet.owner: ', await ethWallet.owner());
     }else{
-        console.log('Cannot view owner. EthWallet address not found');
+        console.log('⚠️  Cannot view owner. EthWallet address not found');
     }
 }
 
 export async function getEthSenderBalance() {
     if(!ethSenderExist()){
-        console.log('Cannot get balance. EthSender address not found');
+        console.log('⚠️  Cannot get balance. EthSender address not found');
         return;
     }
 
     const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
     let balance = await ethSender.getContractBalance();
-    console.log(`EthSender.balance: ${ethers.formatEther(balance)} ETH`);
+    console.log(`✅ EthSender.balance: ${ethers.formatEther(balance)} ETH`);
 }
 
 export async function getEthWalletBalance() {
-    if(!ethWalletExists()){
-        console.log('Cannot get balance. EthWallet address not found');
-        return;
-    }
+    try {
+        if(!ethWalletExists()){
+            console.log('⚠️  Cannot get balance. EthWallet address not found');
+            return;
+        }
 
-    const ethWallet = await ethers.getContractAt('EthWallet', ethWalletAddr);
-    let balance = await ethWallet.getContractBalance();
-    console.log(`EthWallet.balance: ${ethers.formatEther(balance)} ETH`);
+        const ethWallet = await ethers.getContractAt('EthWallet', ethWalletAddr);
+        let balance = await ethWallet.getContractBalance();
+        console.log(`✅ EthWallet.balance: ${ethers.formatEther(balance)} ETH`);
+    } catch (e) {
+        console.log('❗ Failed to get balance');
+    }
 }
 
 export async function depositEth(amount) {
-    if(!ethSenderExist()){
-        console.log('Cannot deposit Eth to EthSender. EthSender address not found');
-        return;
-    }
+    try {
+        if(!ethSenderExist()){
+            console.log('⚠️  Cannot deposit Eth to EthSender. EthSender address not found');
+            return;
+        }
     
-    const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
-    await ethSender.deposit({value: ethers.parseEther(amount)});
-    console.log(`${amount} ETH deposited to EthSender`);
+        const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
+        await ethSender.deposit({value: ethers.parseEther(amount)});
+        console.log(`✅ ${amount} ETH deposited to EthSender`);
+    } catch (e) {
+        console.log('❗ Failed to deposit eth');
+    }
 }
 
 export async function sendEth(recipient, amount) {
-    if(!ethSenderExist()){
-        console.log('Cannot send Eth. EthSender address not found');
-        return;
-    }
+    try{
+        if(!ethSenderExist()){
+            console.log('⚠️  Cannot send Eth. EthSender address not found');
+            return;
+        }
 
-    const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
-    await ethSender.sendEth(recipient, {value: ethers.parseEther(amount)});
+        const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
+        await ethSender.sendEth(recipient, ethers.parseEther(amount));
+    }catch(e){
+        console.log('❗ Failed to send eth');
+    }
 }
