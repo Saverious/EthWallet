@@ -29,5 +29,5 @@ try {
 
     rl.close();
 } catch (e) {
-    console.log('*** Main() ***\n', e);
+    console.error(`‼️  ${e.message}`);
 }

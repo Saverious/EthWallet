@@ -20,7 +20,7 @@ export async function deployContracts() {
         ethWalletAddr = await ethWallet.getAddress();
         console.log('✅ Deployed EthWallet');
     }catch(e){
-        console.log("*** scripts/deploy.js ‼️ ***\n", e);
+        console.error(`‼️  ${e.message}`);
     }
 }
 
@@ -84,7 +84,7 @@ export async function getEthWalletBalance() {
         let balance = await ethWallet.getContractBalance();
         console.log(`✅ EthWallet.balance: ${ethers.formatEther(balance)} ETH`);
     } catch (e) {
-        console.log('❗ Failed to get balance');
+        console.error(`‼️  ${e.message}`);
     }
 }
 
@@ -99,7 +99,7 @@ export async function depositEth(amount) {
         await ethSender.deposit({value: ethers.parseEther(amount)});
         console.log(`✅ ${amount} ETH deposited to EthSender`);
     } catch (e) {
-        console.log('❗ Failed to deposit eth');
+        console.error(`‼️  ${e.message}`);
     }
 }
 
@@ -113,6 +113,6 @@ export async function sendEth(recipient, amount) {
         const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
         await ethSender.sendEth(recipient, ethers.parseEther(amount));
     }catch(e){
-        console.log('❗ Failed to send eth');
+        console.error(`‼️  ${e.message}`);
     }
 }
