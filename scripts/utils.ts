@@ -1,8 +1,9 @@
+import readline from 'node:readline/promises';
 import { isAddress } from 'ethers';
 
-import { deployContracts, viewAddresses, viewOwners, getEthSenderBalance,  getEthWalletBalance, depositEth, sendEth, } from './interact.js';
+import { deployContracts, viewAddresses, viewOwners, getEthSenderBalance,  getEthWalletBalance, depositEth, sendEth, } from './interact.ts';
 
-export async function selectOperation(rl, index) {
+export async function selectOperation(rl: readline.Interface, index: string) {
     switch(index){
         case '1':
             await deployContracts();

@@ -1,8 +1,8 @@
 import hardhat from "hardhat";
 const { ethers } = hardhat;
 
-let ethWalletAddr = null;
-let ethSenderAddr = null;
+let ethWalletAddr: string = '';
+let ethSenderAddr: string = '';
 
 export async function deployContracts() {
     try{
@@ -20,16 +20,20 @@ export async function deployContracts() {
         ethWalletAddr = await ethWallet.getAddress();
         console.log('✅ Deployed EthWallet');
     }catch(e){
-        console.error(`‼️  ${e.message}`);
+        if(e instanceof Error){
+            console.error(`‼️  ${e.message}`);
+        }else{
+            console.error(`‼️  ${e}`);
+        }
     }
 }
 
 function ethSenderExist(){
-    return ethSenderAddr !== null && ethSenderAddr !== '';
+    return ethSenderAddr !== '';
 }
 
 function ethWalletExists(){
-    return ethWalletAddr !== null && ethWalletAddr !== '';
+    return ethWalletAddr !== '';
 }
 
 export function viewAddresses() {
@@ -84,11 +88,15 @@ export async function getEthWalletBalance() {
         let balance = await ethWallet.getContractBalance();
         console.log(`✅ EthWallet.balance: ${ethers.formatEther(balance)} ETH`);
     } catch (e) {
-        console.error(`‼️  ${e.message}`);
+        if(e instanceof Error){
+            console.error(`‼️  ${e.message}`);
+        }else{
+            console.error(`‼️  ${e}`);
+        }
     }
 }
 
-export async function depositEth(amount) {
+export async function depositEth(amount: string) {
     try {
         if(!ethSenderExist()){
             console.log('⚠️  Cannot deposit Eth to EthSender. EthSender address not found');
@@ -99,11 +107,15 @@ export async function depositEth(amount) {
         await ethSender.deposit({value: ethers.parseEther(amount)});
         console.log(`✅ ${amount} ETH deposited to EthSender`);
     } catch (e) {
-        console.error(`‼️  ${e.message}`);
+        if(e instanceof Error){
+            console.error(`‼️  ${e.message}`);
+        }else{
+            console.error(`‼️  ${e}`);
+        }
     }
 }
 
-export async function sendEth(recipient, amount) {
+export async function sendEth(recipient: string, amount: string) {
     try{
         if(!ethSenderExist()){
             console.log('⚠️  Cannot send Eth. EthSender address not found');
@@ -113,6 +125,10 @@ export async function sendEth(recipient, amount) {
         const ethSender = await ethers.getContractAt('EthSender', ethSenderAddr);
         await ethSender.sendEth(recipient, ethers.parseEther(amount));
     }catch(e){
-        console.error(`‼️  ${e.message}`);
+        if(e instanceof Error){
+            console.error(`‼️  ${e.message}`);
+        }else{
+            console.error(`‼️  ${e}`);
+        }
     }
 }
