@@ -15,21 +15,28 @@ contract EthSender is IEvents, IErrors {
         owner = msg.sender;
     }
 
-    modifier hasEnoughEth(uint _amountToSend) {
+    modifier hasEnoughEth(uint _amount) {
         uint _balance = address(this).balance;
 
-        if(_amountToSend > _balance) {
-            revert InsufficientFunds(_balance, _amountToSend);
+        if(_amount > _balance) {
+            revert InsufficientFunds(_balance, _amount);
         }
 
         _;
     }
 
-    function getContractBalance() public view returns (uint) {
+    function getContractBalance() 
+    public
+    view 
+    returns (uint) 
+    {
         return address(this).balance;
     }
 
-    function deposit() external payable {
+    function deposit() 
+    external 
+    payable 
+    {
         //
     }
 

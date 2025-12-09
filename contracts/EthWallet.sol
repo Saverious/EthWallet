@@ -30,18 +30,29 @@ contract EthWallet is IEvents, IErrors {
         _;
     }
 
-    receive() external payable {
+    receive() 
+    external 
+    payable 
+    {
         emit EthReceived(msg.sender, msg.value);
     }
 
-    function withdrawEth(uint _amount) isOwnerOfWallet hasEnoughEth(_amount) public {
+    function withdrawEth(uint _amount) 
+    isOwnerOfWallet 
+    hasEnoughEth(_amount) 
+    public 
+    {
         /*
         *   WITHDRAW ETH LOGIC (SEND ETH BACK TO WALLET)
         */
         emit EthWithdrawn(_amount);
     }
 
-    function getContractBalance() public view returns (uint) {
+    function getContractBalance() 
+    public 
+    view 
+    returns (uint) 
+    {
         return address(this).balance;
     }
 }
